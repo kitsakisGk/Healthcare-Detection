@@ -332,7 +332,7 @@ def main():
 
         with col1:
             st.subheader("Original X-Ray")
-            st.image(image, use_column_width=True)
+            st.image(image, width='stretch')
 
         with col2:
             st.subheader("Analysis")
@@ -398,11 +398,11 @@ def main():
 
         with col3:
             st.subheader("Original")
-            st.image(original_img, use_column_width=True)
+            st.image(original_img, width='stretch')
 
         with col4:
             st.subheader("Grad-CAM Heatmap")
-            st.image(gradcam_img, use_column_width=True)
+            st.image(gradcam_img, width='stretch')
 
         # Interpretation guide
         st.markdown("---")

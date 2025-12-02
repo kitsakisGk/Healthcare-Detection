@@ -218,7 +218,7 @@ with tab1:
                     images = list(folder.glob('*.jpg')) + list(folder.glob('*.jpeg')) + list(folder.glob('*.png'))
                     if images:
                         sample_img = Image.open(images[0])
-                        cols[idx % 4].image(sample_img, caption=class_name, use_container_width=True)
+                        cols[idx % 4].image(sample_img, caption=class_name, width='stretch')
 
 # TAB 2: Training
 with tab2:
@@ -465,7 +465,7 @@ with tab3:
             col1, col2 = st.columns(2)
 
             with col1:
-                st.image(image, caption="Test Image", use_container_width=True)
+                st.image(image, caption="Test Image", width='stretch')
 
             with col2:
                 # Preprocess
@@ -527,7 +527,7 @@ with tab4:
 
             with st.spinner("Generating Grad-CAM visualization..."):
                 try:
-                    _, val_transform = get_transforms(224)
+                    val_transform = get_transforms(224, mode='val')
 
                     # Generate Grad-CAM
                     overlay, predicted_class, confidence, heatmap = generate_gradcam_overlay(
@@ -542,7 +542,7 @@ with tab4:
 
                     with col1:
                         st.subheader("📷 Original Image")
-                        st.image(image, use_container_width=True)
+                        st.image(image, width='stretch')
 
                     with col2:
                         st.subheader("🎨 Heatmap")
@@ -553,11 +553,11 @@ with tab4:
                             cv2.COLORMAP_JET
                         )
                         heatmap_colored = cv2.cvtColor(heatmap_colored, cv2.COLOR_BGR2RGB)
-                        st.image(heatmap_colored, use_container_width=True)
+                        st.image(heatmap_colored, width='stretch')
 
                     with col3:
                         st.subheader("🔍 Overlay")
-                        st.image(overlay, use_container_width=True)
+                        st.image(overlay, width='stretch')
 
                     # Prediction details
                     class_name = st.session_state.class_names[predicted_class]
