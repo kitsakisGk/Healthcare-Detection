@@ -1,3 +1,14 @@
+---
+title: Healthcare Disease Detection
+emoji: 🏥
+colorFrom: blue
+colorTo: green
+sdk: streamlit
+sdk_version: "1.28.0"
+app_file: app.py
+pinned: false
+---
+
 # AI-Powered Healthcare Disease Detection
 
 [![CI/CD](https://github.com/kitsakisGk/Healthcare-Detection/actions/workflows/ci.yml/badge.svg)](https://github.com/kitsakisGk/Healthcare-Detection/actions/workflows/ci.yml)
