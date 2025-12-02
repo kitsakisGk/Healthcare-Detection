@@ -122,7 +122,7 @@ def load_model():
         model.eval()
         return model, model_name
     except Exception as e:
-        st.info(f"Ensemble model not available: {str(e)}. Trying individual models...")
+        pass  # Silently try next option
 
     # Fallback to EfficientNet-B3
     try:
@@ -150,7 +150,7 @@ def load_model():
         model.eval()
         return model, model_name
     except Exception as e:
-        st.warning(f"EfficientNet-B3 not available: {str(e)}. Using untrained ResNet50 for demo.")
+        pass  # Silently try next option
 
     # Last fallback: untrained ResNet50
     model = models.resnet50(weights=None)
@@ -304,7 +304,11 @@ def main():
     try:
         model, model_name = load_model()
         cam = load_gradcam(model)
-        st.success(f"Model loaded successfully! Using: **{model_name}** | Device: **{device.type.upper()}**")
+
+        if "Untrained" in model_name:
+            st.info(f"🎓 **Demo Mode**: Using **{model_name}**. For trained models, use the **Interactive Training** tab to train your own model!")
+        else:
+            st.success(f"✅ Model loaded successfully! Using: **{model_name}** | Device: **{device.type.upper()}**")
     except Exception as e:
         st.error(f"Error loading model: {str(e)}")
         st.info("Please ensure the model file exists in the models/ directory")
@@ -328,7 +332,7 @@ def main():
 
         with col1:
             st.subheader("Original X-Ray")
-            st.image(image, width='stretch')
+            st.image(image, use_container_width=True)
 
         with col2:
             st.subheader("Analysis")
