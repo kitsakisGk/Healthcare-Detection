@@ -218,7 +218,7 @@ with tab1:
                     images = list(folder.glob('*.jpg')) + list(folder.glob('*.jpeg')) + list(folder.glob('*.png'))
                     if images:
                         sample_img = Image.open(images[0])
-                        cols[idx % 4].image(sample_img, caption=class_name, use_column_width=True)
+                        cols[idx % 4].image(sample_img, caption=class_name, use_container_width=True)
 
 # TAB 2: Training
 with tab2:
@@ -261,7 +261,8 @@ with tab2:
             dataset_path = Path(st.session_state.dataset_path)
 
             # Load data
-            train_transform, val_transform = get_transforms(224)
+            train_transform = get_transforms(224, mode='train')
+            val_transform = get_transforms(224, mode='val')
 
             try:
                 dataset = MultiClassDataset(
@@ -464,11 +465,11 @@ with tab3:
             col1, col2 = st.columns(2)
 
             with col1:
-                st.image(image, caption="Test Image", use_column_width=True)
+                st.image(image, caption="Test Image", use_container_width=True)
 
             with col2:
                 # Preprocess
-                _, val_transform = get_transforms(224)
+                val_transform = get_transforms(224, mode='val')
                 image_tensor = val_transform(image).unsqueeze(0)
 
                 # Get top-3 predictions
@@ -541,7 +542,7 @@ with tab4:
 
                     with col1:
                         st.subheader("📷 Original Image")
-                        st.image(image, use_column_width=True)
+                        st.image(image, use_container_width=True)
 
                     with col2:
                         st.subheader("🎨 Heatmap")
@@ -552,11 +553,11 @@ with tab4:
                             cv2.COLORMAP_JET
                         )
                         heatmap_colored = cv2.cvtColor(heatmap_colored, cv2.COLOR_BGR2RGB)
-                        st.image(heatmap_colored, use_column_width=True)
+                        st.image(heatmap_colored, use_container_width=True)
 
                     with col3:
                         st.subheader("🔍 Overlay")
-                        st.image(overlay, use_column_width=True)
+                        st.image(overlay, use_container_width=True)
 
                     # Prediction details
                     class_name = st.session_state.class_names[predicted_class]
