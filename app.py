@@ -398,11 +398,11 @@ def main():
 
         with col3:
             st.subheader("Original")
-            st.image(original_img, width='stretch')
+            st.image(original_img, use_column_width=True)
 
         with col4:
             st.subheader("Grad-CAM Heatmap")
-            st.image(gradcam_img, width='stretch')
+            st.image(gradcam_img, use_column_width=True)
 
         # Interpretation guide
         st.markdown("---")

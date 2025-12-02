@@ -35,14 +35,15 @@ env/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# Data (but keep README)
+# Data (but keep README and sample dataset)
 data/*
 !data/README.md
+!data/pneumonia_sample_dataset.zip
 *.csv
-*.zip
+# *.zip  # Commented to allow sample dataset
 *.tar.gz
 
-# Models (large files)
+# Models (large files) - too large for GitHub
 *.pth
 *.pt
 *.h5
