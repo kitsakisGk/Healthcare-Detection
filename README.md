@@ -24,6 +24,8 @@ This project provides AI-powered diagnostic assistance for healthcare profession
 
 **Performance**: 99.14% F1 Score (Ensemble Model)
 
+> **Note**: Pre-trained models are not included in the repository due to size constraints. Train your own models using the Interactive Training interface or the provided Colab notebook.
+
 ## Features
 
 - **Multi-Model Ensemble**: Combines EfficientNet-B3, ResNet152, and DenseNet201
