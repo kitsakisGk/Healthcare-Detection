@@ -1,0 +1,49 @@
+# Git
+.git
+.gitignore
+.github
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Data (too large for container)
+data/*
+!data/README.md
+
+# Models (mount as volume instead)
+models/*.pth
+models/*.pt
+
+# Development
+.vscode/
+.idea/
+*.swp
+.ipynb_checkpoints
+
+# Docs
+docs/
+*.md
+!README.md
+
+# Reports
+reports/
+
+# Logs
+logs/
+*.log
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db

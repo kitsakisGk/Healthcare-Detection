@@ -1,0 +1,29 @@
+name: Deploy to Hugging Face Spaces
+
+on:
+  workflow_dispatch:  # Manual trigger only
+  # Disabled auto-deploy - deploy manually via HF website
+  # push:
+  #   branches: [ main ]
+  #   paths:
+  #     - 'app/**'
+  #     - 'src/**'
+  #     - 'requirements.txt'
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to Hugging Face Spaces
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git remote add hf https://kitsakisG:$HF_TOKEN@huggingface.co/spaces/kitsakisG/Pneumonia-Detection
+          git push hf main --force
