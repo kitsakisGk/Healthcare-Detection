@@ -1,0 +1,162 @@
+# Clinical-Grade Pneumonia Detection Configuration
+# Author: Georgios Kitsakis
+# Multi-Class Classification: Normal/Bacterial/Viral/COVID-19
+
+project:
+  name: "healthcare-pneumonia-detection"
+  version: "2.0.0-clinical"
+  description: "Production-grade multi-class pneumonia detection"
+
+data:
+  num_classes: 4
+  class_names: ["NORMAL", "BACTERIAL", "VIRAL", "COVID19"]
+  img_size: 224
+  batch_size: 32
+  num_workers: 4
+
+  paths:
+    base_dir: "data_multiclass"
+    train_dir: "data_multiclass/train"
+    val_dir: "data_multiclass/val"
+    test_dir: "data_multiclass/test"
+
+  augmentation:
+    train:
+      random_horizontal_flip: 0.5
+      random_rotation: 15
+      color_jitter:
+        brightness: 0.2
+        contrast: 0.2
+      random_affine:
+        degrees: 10
+        translate: [0.1, 0.1]
+
+  class_weights:
+    enabled: true
+    method: "inverse_frequency"  # or "effective_samples"
+
+training:
+  epochs: 30
+  timeout_minutes: 25  # Maximum training time for slow computers
+  early_stopping:
+    enabled: true
+    patience: 5
+    min_delta: 0.001
+
+  optimizer:
+    type: "adam"
+    lr: 0.0001
+    weight_decay: 0.0001
+
+  scheduler:
+    type: "reduce_on_plateau"
+    mode: "min"
+    factor: 0.5
+    patience: 3
+    min_lr: 0.000001
+
+  mixed_precision: true
+  gradient_clipping: 1.0
+
+  checkpoint:
+    save_best_only: true
+    save_frequency: 1
+    monitor: "val_f1_score"
+    mode: "max"
+
+models:
+  ensemble:
+    enabled: true
+    voting: "soft"  # soft or hard
+    weights: "auto"  # auto or [0.33, 0.33, 0.34]
+
+  architectures:
+    resnet152:
+      pretrained: true
+      freeze_layers: 3
+      dropout: 0.5
+
+    densenet201:
+      pretrained: true
+      freeze_layers: true
+      growth_rate: 32
+      dropout: 0.5
+
+    efficientnet_b3:
+      pretrained: true
+      freeze_batch_norm: true
+      dropout: 0.3
+
+evaluation:
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - auc_roc
+    - confusion_matrix
+
+  target_recall: 0.95  # Critical for medical AI
+  target_accuracy: 0.94
+
+explainability:
+  grad_cam:
+    enabled: true
+    target_layer: "auto"
+
+  shap:
+    enabled: true
+    num_samples: 100
+
+  lime:
+    enabled: false
+    num_samples: 1000
+
+inference:
+  confidence_threshold: 0.8
+  uncertainty_quantification: true
+  monte_carlo_dropout:
+    enabled: true
+    num_iterations: 20
+
+  risk_stratification:
+    low: [0.0, 0.3]
+    medium: [0.3, 0.7]
+    high: [0.7, 1.0]
+
+medical:
+  dicom:
+    enabled: true
+    tags_to_extract:
+      - PatientID
+      - StudyDate
+      - Modality
+      - ViewPosition
+
+  quality_control:
+    enabled: true
+    checks:
+      - image_size
+      - contrast_range
+      - brightness_range
+      - artifact_detection
+
+  reporting:
+    format: "pdf"
+    include_gradcam: true
+    include_confidence: true
+    include_risk_level: true
+    disclaimer: true
+
+logging:
+  level: "INFO"
+  tensorboard: true
+  mlflow: false
+  wandb: false
+
+  save_path: "logs"
+
+deployment:
+  framework: "streamlit"
+  docker: true
+  huggingface_spaces: true
