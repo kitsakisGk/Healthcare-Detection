@@ -138,13 +138,13 @@ def get_target_layer(model, model_type='efficientnet'):
     """
     if model_type.lower() == 'efficientnet':
         # EfficientNet: last conv layer before avg pool
-        return model.model.features[-1]
+        return model.backbone.features[-1]
     elif model_type.lower() == 'resnet':
         # ResNet: layer4
-        return model.model.layer4[-1]
+        return model.backbone.layer4[-1]
     elif model_type.lower() == 'densenet':
         # DenseNet: last dense block
-        return model.model.features[-1]
+        return model.backbone.features[-1]
     else:
         raise ValueError(f"Unknown model type: {model_type}")
 
